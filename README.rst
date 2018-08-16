@@ -1,7 +1,7 @@
 Introduction
 ============
 
-.. image:: https://readthedocs.org/projects/adafruit-circuitpython-rgb_display/badge/?version=latest
+.. image :: https://readthedocs.org/projects/adafruit-circuitpython-rgb_display/badge/?version=latest
     :target: https://circuitpython.readthedocs.io/projects/rgb_display/en/latest/
     :alt: Documentation Status
 
