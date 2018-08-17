@@ -16,20 +16,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 """`TG-Modules.TG-RGB.rgb`
-Base class for all RGB Display devices
-Author(s):Radomir Dopieralski, Michael McWethy, and TG-Techie"""
+Base class for all RGB Display devices W/ TEXT!!!!!
+This is a derivative of the dadfruit-circuitpython-rgb library 
+Author(s):Radomir Dopieralski, Michael McWethy, and Jonah Yolles-Murphy"""
 import time
 from math import sqrt
 from micropython import const
 import struct  # import ustruct as struct
 import adafruit_bus_device.spi_device as spi_device
 
-from TG_Modules.Fonts.font_01 import text_dict
 from gc import collect as clean_mem
 
 
 
-__version__ = "0.1"
+__version__ = "1.0"
 __repo__ = "https://github.com/TG-Techie/TG-RGB"
 
 # This is the size of the buffer to be used for fill operations, in 16-bit
@@ -73,11 +73,13 @@ class Display: #pylint: disable-msg=no-member
     _ENCODE_POS = ">HH"
     _DECODE_PIXEL = ">BBB"
 
-    def __init__(self, hardware_width, hardware_height, font = text_dict):
+    def __init__(self, hardware_width, hardware_height, font = None):
         #hardware_width and height are for to the dram buffer size
         self.hardware_width = hardware_width
         self.hardware_height = hardware_height
-        self.text_dict = font
+        if font == None:
+            from TG_Modules.TG_Fonts.font_01 import text_dict
+        self.text_dict = text_dict
         self.color_depth = 2
         self.init()
 
@@ -163,8 +165,7 @@ class Display: #pylint: disable-msg=no-member
     def _byte_coord(self, grid_width, x,y):
         return self.color_depth*(grid_width*y + x)
 
-
-    def text(self,xin,yin,text,color = color_white, background = color_black, size = 1, rect_extension = 0):
+    def text(self,xin,yin,text,color = color_white, background = color_black, size = 1, rect_extension = 0, italics = 0):
         comp_list = []
         enter_stat = False
         if type(text) != list:
@@ -209,7 +210,7 @@ class Display: #pylint: disable-msg=no-member
                 text.pop(0)
         clean_mem()
         width = len(comp_list)*size 
-        height = text_dict['Height']*size
+        height = self.text_dict['Height']*size
         sq_size = size**2
         global array
         array = bytearray(width * height * sq_size *self.color_depth )# 2 if for color depth
@@ -226,19 +227,20 @@ class Display: #pylint: disable-msg=no-member
                         for byte_offset in (range(self.color_depth)):
                             array[pos+self.color_depth-1-byte_offset] = ((cur_color) >> byte_offset*8) & 255 #(0b11111111)
         #put background around
-        self.rect(xin+1 , yin, width +1, height +1 + rect_extension, background)
+        self.rect(xin , yin, width +1, height +1 + rect_extension, background)
         #put text as block
-        self._block(xin+1 , yin+1 , xin-1+ width*size +1, yin-1+ height*size +1, array)
+        self._block(xin , yin+1 , xin-1+ width*size +italics, yin-1+ height*size +1, array)
         try:
             self.text(xin,yin+1+rect_extension+7*size,next_text,
                                       color = color,
                                       background = background, size = size,
-                                      rect_extension = rect_extension)
+                                      rect_extension = rect_extension,
+                                      italics = italics)
         except NameError:
             pass
             
 
-    def scroll(self,x,y,str, color = colorst(255,255,255), size = 1):
+    def scroll(self,x,y,str, color = colorst(255,255,255), background = None, size = 1):
         comp_list = []
         for section in (str.upper()).split('__'):
             try:
@@ -257,6 +259,9 @@ class Display: #pylint: disable-msg=no-member
         y_pos = 0
         for stripe in comp_list[1:]:
             y_pos = size
+            if background != None:
+                self.rect(x+x_pos,y-1+y_pos,size,
+                              self.text_dict['Height']*size +1,background)
             #stripe_text = bin(stripe)[3:10]
             #print(stripe_text) # print out bits being striped
             for j in reversed(range(7)): 

@@ -24,9 +24,13 @@
 based on
 `adafruit_rgb_display.st7735`
 ====================================================
-A simple driver for the ST7735-based displays.
-* Author(s): Radomir Dopieralski, Michael McWethy, TG-Techie(Jonah Yolles-Murphy)
+A decent driver for the ST7735R displays mweant for use with the TG_RGB library.
+W/ ROTATION!!!!!!
+This is a derivative of the dadfruit-circuitpython-rgb library 
+* Author(s): Radomir Dopieralski, Michael McWethy, Jonah Yolles-Murphy
 """
+
+__version__ = "1.0"
 
 from TG_Modules.TG_RGB.rgb import DisplaySPI
 try:

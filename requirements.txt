@@ -1,2 +1,7 @@
-Adafruit-Blinka
 adafruit-circuitpython-busdevice
+TG_Fonts
+
+putting both TG_RGB and TG_Fonts in a folder called 'TG_Modules'
+
+Having Fun
+
