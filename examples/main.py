@@ -48,7 +48,9 @@ backlite = dio(backlight_pin,0,False)
 backlite.value = False
 
 #setup the display as a car named "disp"
-disp = ST7735R(disp_spi, cs=dio(disp_cs),dc=dio(disp_dc),rst=dio(disp_rst),rotation = 1)
+disp = ST7735R(disp_spi, cs=dio(disp_cs),dc=dio(disp_dc),
+               rst=dio(disp_rst),rotation = 1)
+#LOOK ROTATIONS------------------^^^^^^^^^^^^
 
 #start with black screen then turn on
 disp.fill(0)
