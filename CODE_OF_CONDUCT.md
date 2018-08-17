@@ -1,4 +1,4 @@
-# Adafruit Community Code of Conduct
+# Thit Repo Complies With The: Adafruit Community Code of Conduct
 
 ## Our Pledge
 
